@@ -28,10 +28,6 @@
 				},
 				columns: {},
 				columnOrder: [],
-				// rows: {
-				// 	$in: $(),
-				// 	$out: $()
-				// }
 				records: {},
 				currentlyEditing: undefined
 			};
@@ -59,26 +55,14 @@
 			this._renderTableHead(this.table);
 			this._loadRecords();
 
-			// console.log(this.options);
-
 			if (this.options.ajax) {
-				// $.extend(true, {}, columnTemplate);
 				this.table.ajax = $.extend(true,this.table.ajax, this.options.ajax);
-
-				// console.log(this.table.columns.ajax);
 			}
 
 			if (this.options.instanceVars && this.options.instanceVars.init) {
-				// console.log('hey');
 				this.options.instanceVars.init();
-				// console.log(this.options.instanceVars);
 			}
 
-
-
-			// this._auditTable();
-
-			// console.log(this.table.columns);
 			this._trigger('widgetinitialized', null, {
 				columns: this.table.columns,
 				records: this.table.records
@@ -100,18 +84,7 @@
 
 			var inputs = this._getFormInputs();
 
-			// console.log(inputs);
-
-			// $.each(inputs, function(inputName, input) {
-			// 	columns[inputName] = $.extend(true, {}, columnTemplate);
-			// 	columns[inputName].input = input;
-			// 	columns[inputName].header = input.$elements.data('header');
-			// 	columns[inputName].order = input.$elements.data('column-order');
-			// });
-
 			$.each(inputs, function(index, input) {
-				// console.log(this.oldName);
-				// console.log(input.$elements.data().columnName);
 				var columnName;
 				if (input.$elements.data().columnName) {
 					columnName = input.$elements.data().columnName;
@@ -124,8 +97,6 @@
 				columns[columnName].header = this.$elements.data('header');
 				columns[columnName].order = this.$elements.data('column-order');
 			});
-
-			// console.log(columns);
 
 			return columns;
 
@@ -176,7 +147,6 @@
 				});
 
 				self._attachGettersAndSetters(input);
-				// inputs[newName] = input;
 				input.oldName = name;
 				input.name = newName;
 				inputs.push(input);
@@ -211,14 +181,10 @@
 
 			});
 
-			// console.log(elementsCollection);
-
 			return elementsCollection;
 		},
 
 		_getElementType: function($elements) {
-
-
 
 			var $field;
 			var type;
@@ -381,13 +347,10 @@
 
 			input.getHiddenValueField = function(columnName, value, text) {
 
-				// return this.$hiddenValueField.clone().val(this.getValue());
 				$hf = this.$hiddenValueField.clone().val(value);
-				// $hf.data('foo', 'bar');
 				$hf.attr('data-text', text);
 				$hf.attr('data-column-name', columnName);
-				// console.log($hf.data('text'));
-				// return this.$hiddenValueField.clone().val(value);
+
 				return $hf;
 			}
 
@@ -404,17 +367,8 @@
 
 		_generateNewInputName: function(name) {
 			var newName;
-
-			// newName = name.replace(/data/, '');
-			// newName = newName.replace(/((\[|\_)\w)/g, function(a,x) {
-			// 	return a.toUpperCase();
-			// });
-			// newName = newName.replace(/(\d|\[|\]|\_)/g, '');
-
 			newName = name.replace(/data/, '');
 			newName = newName.replace(/\[\d\]/, '');
-
-			// console.log(newName);
 
 			return newName;
 		},
@@ -427,11 +381,6 @@
 				return a.toUpperCase();
 			});
 			newName = newName.replace(/(\d|\[|\]|\_)/g, '');
-
-			// newName = name.replace(/data/, '');
-			// newName = newName.replace(/\[\d\]/, '');
-
-			// console.log(newName);
 
 			return newName;
 		},
@@ -519,35 +468,6 @@
 					self._renderTableRow(id, record);
 				}
 			});
-
-			// console.log(this.table.columns);
-			// console.log(this.table.records);
-
-
-			//---------------
-			// this.table.elements.$tbody.find('tr').find('td:first').each(function() {
-			// 	// console.log(this);
-
-			// 	var input = $(this).find('[data-column-name="StateTerritoryCountryId"]');
-			// 	var val = parseInt(input.val());
-
-			// 	// console.log(val);
-			// 	if (val === 2) {
-			// 		console.log(input.val());
-			// 	}
-
-			// });
-
-			// var t = this.table.elements.$tbody.find('tr').find('td:first');
-
-			// console.log(t);
-
-			// this.table.elements.$tbody.find('tr').each(function() {
-			// 	// console.log(this);
-			// 	var t = $(this).first('td');
-
-			// 	console.log(t[0]);
-			// });
 		},
 
 		_getColumnOrder: function(columns) {
@@ -584,14 +504,6 @@
 					if (self.table.ajax.onInsert.active &&
 						self.table.ajax.onInsert.url) {
 						promise = self._performAjaxTransaction('update', record);
-
-						// if (typeof ajaxResult == 'undefined') {
-						// 	performAction = false;
-						// } else if (!!ajaxResult === false) {
-						// 	alert('An error occurred and the record could not be updated.');
-						// 	performAction = false;
-						// }
-
 					} else {
 						// ugly hack because I cant be bothered, remove duplication between ajax and non ajax response when you get time
 						record.id = self.table.currentlyEditing;
@@ -602,7 +514,6 @@
 						self._renderTableBody();
 					}
 
-					// if (performAction) {
 					if (promise) {
 						promise.done(function(data) {
 							if (!!data === false) {
@@ -621,25 +532,9 @@
 						});
 					}
 
-					// }
-
-
-
-					// this.table.records[this.table.currentlyEditing] = values;
-					// this._toggleButtonState();
 				} else {
 					if (self.table.ajax.onInsert.active && self.table.ajax.onInsert.url) {
 						promise = self._performAjaxTransaction('insert', record);
-
-						// if (typeof ajaxResult == 'undefined') {
-						// 	performAction = false;
-						// } else if (!!ajaxResult === false) {
-						// 	alert('An error occurred and the record could not be created.');
-						// 	performAction = false;
-						// } else {
-						// 	record.setPrimaryKey(ajaxResult);
-						// }
-
 					} else {
 						// ugly hack because I cant be bothered, remove duplication between ajax and non ajax response when you get time
 						recordId = self._generateRecordId();
@@ -650,7 +545,6 @@
 						self._renderTableBody();
 					}
 
-					// if (performAction) {
 					if (promise) {
 						promise.done(function(data) {
 							if (!!data === false) {
@@ -671,93 +565,22 @@
 						});
 					}
 
-						// console.log(record);
-					// }
-
 				}
 			},
 			function() {
 				console.log('form is not valid');
 			});
 
-			// if (this._isFormValid()) {
-			// 	var record = this._getFormValues();
-			// 	var performAction = true;
-
-			// 	if (this.table.currentlyEditing) {
-
-			// 		if (this.table.ajax.onInsert.active &&
-			// 			this.table.ajax.onInsert.url) {
-			// 			ajaxResult = this._performAjaxTransaction('update', record);
-
-			// 			if (typeof ajaxResult == 'undefined') {
-			// 				performAction = false;
-			// 			} else if (!!ajaxResult === false) {
-			// 				alert('An error occurred and the record could not be updated.');
-			// 				performAction = false;
-			// 			}
-
-			// 		}
-
-			// 		if (performAction) {
-			// 			record.id = this.table.currentlyEditing;
-			// 			this.table.records[this.table.currentlyEditing] = record;
-			// 			this.clearForm();
-			// 			this._toggleButtonState();
-			// 			this._trigger('recordupdate', null, record);
-			// 			this._renderTableBody();
-			// 		}
-
-
-
-			// 		// this.table.records[this.table.currentlyEditing] = values;
-			// 		// this._toggleButtonState();
-			// 	} else {
-			// 		if (this.table.ajax.onInsert.active && this.table.ajax.onInsert.url) {
-			// 			ajaxResult = this._performAjaxTransaction('insert', record);
-
-			// 			if (typeof ajaxResult == 'undefined') {
-			// 				performAction = false;
-			// 			} else if (!!ajaxResult === false) {
-			// 				alert('An error occurred and the record could not be created.');
-			// 				performAction = false;
-			// 			} else {
-			// 				record.setPrimaryKey(ajaxResult);
-			// 			}
-
-			// 		}
-
-			// 		if (performAction) {
-			// 			recordId = this._generateRecordId();
-			// 			record.id = recordId;
-			// 			this.table.records[recordId] = record;
-			// 			this.clearForm();
-			// 			this._trigger('recordinsert', null, record);
-			// 			this._renderTableBody();
-			// 			// console.log(record);
-			// 		}
-
-			// 	}
-
-
-
-
-				// console.log(this.table.records);
-			// }
-
-
 		},
 
 		_generateRecordId: function() {
-			// var number = 1 + Math.floor(Math.random() * 6);
 			var number = Math.floor(Math.random() * $.now());
-			// console.log(number);
+
 			return number;
 		},
 
 		_getFormValues: function() {
 			var self = this;
-			// var primaryKeyField = undefined;
 			var record = {
 				id: undefined,
 				isVisible: true,
@@ -772,9 +595,6 @@
 
 				if (this.input.getValue) {
 
-					// console.log(this.input.name);
-					// console.log(this.input.type);
-
 					record.fields[colName] = {};
 					record.fields[colName].value = (this.input.formatting.toSystem)
 						? this.input.formatting.toSystem(this.input.getValue())
@@ -786,7 +606,6 @@
 						? this.input.formatting.fromSystem(record.fields[colName].text)
 						: record.fields[colName].text;
 					if (this.input.type === 'record_id') {
-						// primaryKeyField = colName
 						record.getPrimaryKey = function() {
 							return this.fields[colName].value;
 						};
@@ -805,30 +624,12 @@
 
 			});
 
-			// console.log(record.getPrimaryKey());
-
-			// console.log(values);
-
 			return record;
 		},
 
 		_isFormValid: function(validCallback, invalidCallback) {
 
 			var self = this;
-			// var valid = true;
-
-			// $.each(this.table.columns, function(colName, col) {
-			// 	inputs.push(this.input);
-			// });
-
-			//----------------------
-
-			// this._trigger('checkformisvalid', null, {
-			// 	columns: self.table.columns,
-			// 	invalid: function() { valid = false }
-			// });
-
-			//------------------------
 
 			this._trigger('checkformisvalid', null, {
 				columns: self.table.columns,
@@ -840,77 +641,7 @@
 					invalidCallback();
 				}
 			});
-
-
-
-
-			// console.log(valid);
-			// setTimeout(function() {
-			// 	console.log('hello');
-			// 	valid = true;
-			// }, 1);
-
-			// var i = 0;
-			// while(!stop && i < 1000000000) {
-			// 	if (typeof valid !== 'undefined') {
-			// 		console.log('stopping');
-			// 		stop = true;
-			// 	}
-			// 	// console.log(i);
-			// 	i++;
-			// }
-
-			// console.log(valid);
-
-
-			// return false;
-			// return valid;
 		},
-
-		// _isFormValid: function() {
-		// 	var self = this;
-		// 	var valid = true;
-
-		// 	var i = 0;
-		// 	// console.log(this.table.columns);
-		// 	// console.log(Object.keys(this.table.columns).length);
-
-		// 	var columnKeys = $.map(this.table.columns, function(value, key) {
-		// 		return key;
-		// 	});
-
-		// 	console.log(columnKeys);
-
-		// 	// var length = Object.keys(this.table.columns).length;
-
-		// 	while (i < columnKeys.length) {
-		// 		self._trigger('checkinputvalid', null, {
-		// 			input: this.table.columns[columnKeys[i]].input,
-		// 			invalid: function() {
-		// 				valid = false;
-		// 			}
-		// 		});
-
-		// 		i++;
-		// 	}
-
-
-		// 	// $.each(this.table.columns, function(colName, col) {
-
-		// 	// 	self._trigger('checkinputvalid', null, {
-		// 	// 		input: this.input,
-		// 	// 		invalid: function() {
-		// 	// 			valid = false;
-		// 	// 		}
-		// 	// 	});
-		// 	// });
-
-		// 	// console.log(valid);
-
-		// 	valid = false;
-
-		// 	return valid;
-		// },
 
 		_setFormValues: function(record) {
 
@@ -929,14 +660,9 @@
 			$row.addClass('highlight-delete');
 			var promise = undefined;
 
-
-
 			if (confirm(msg)) {
 				var recordId = $row.data().recordId;
 				var record = this.table.records[recordId];
-				// var performAction = true;
-
-				// console.log(record);
 
 				if (record.getPrimaryKey() &&
 					record.getPrimaryKey() !== '' &&
@@ -945,13 +671,6 @@
 
 					promise = this._performAjaxTransaction('delete', record);
 
-					// for some reason typeof ajaxResult === undefined will return false. why???
-					// if (typeof ajaxResult == 'undefined') {
-					// 	performAction = false;
-					// } else if (!!ajaxResult === false) {
-					// 	alert('An error occurred and the selected record could not be deleted.');
-					// 	performAction = false;
-					// }
 				} else {
 					// ugly hack. remove duplication between ajax and non ajax responses when you get time
 					self.clearForm();
@@ -997,7 +716,6 @@
 
 			if (type === 'delete') {
 				var primaryKey = record.getPrimaryKey();
-				// console.log(record);
 
 				if (primaryKey && primaryKey !== '') {
 					url = this.table.ajax.onDelete.url + '/' + primaryKey;
@@ -1019,25 +737,17 @@
 			}
 
 			$('body').addClass('wait');
-			// $('html, body').css('cursor', 'wait');
+
 			if (url) {
 
 				return $.ajax({
 					url: url,
 					type: 'POST',
 					data: data,
-					// async: false,
-					// error: function(jqXHR, textStatus, errorThrown) {
-					// 	alert('An error occurred and the selected action could not be performed');
-					// },
-					// success: function(response) {
-					// 	// console.log(response);
-					// 	result = response;
-					// }
+
 				}).always(function() {
 					$('body').removeClass('wait');
 				});
-				//
 			}
 
 			return undefined;
@@ -1046,14 +756,9 @@
 
 		_loadRecords: function() {
 			var self = this;
-			// this.table.records[$.]
 
-			// $.each(this.table.columns, function(colName, col) {
-			// 	var record = {};
-
-			// });
 			this.table.elements.$tbody.find('tr').each(function() {
-				// console.log(this);
+
 				var record = {
 					id: undefined,
 					isVisible: true,
@@ -1064,17 +769,12 @@
 				};
 				$(this).find('input[data-column-name]').each(function() {
 					$e = $(this);
-					// console.log($(this).data().columnName);
 					var columnName = $e.data().columnName;
 					record.fields[columnName] = {};
 					record.fields[columnName].value = $e.val();
-					// console.log(columnName + ': ' + $e.val());
 					record.fields[columnName].text = $e.data('text');
 
-
 					if ($e.data().primaryKey) {
-						// console.log('hello');
-						// console.log($e.data());
 						record.getPrimaryKey = function() {
 							return this.fields[columnName].value;
 						};
@@ -1083,7 +783,6 @@
 							this.fields[colName].value = key;
 						};
 
-						// console.log(record);
 					};
 
 					// remove this later
@@ -1092,19 +791,14 @@
 						: false;
 				});
 
-				// console.log(record);
-
 				var recordId = self._generateRecordId();
 				// $.data not working again, i have no idea why
 				$(this).attr('data-record-id', recordId);
 				record.id = recordId;
 				self.table.records[recordId] = record;
 				self._trigger('recordloaded', null, record);
-				// console.log(record);
 
 			});
-
-			// console.log(this.table.records);
 
 			this._renderTableBody();
 
@@ -1128,9 +822,7 @@
 
 		_renderTableRow: function(recordId, record) {
 			var self = this;
-			// console.log(record);
 			var cssClasses = record.cssClasses.join(' ');
-			// console.log(cssClasses);
 			var $row = $('<tr data-record-id="'+recordId+'" class="' + cssClasses + '" />');
 			var $firstCell;
 			$.each(this.table.columnOrder, function(index, columnName) {
@@ -1170,10 +862,6 @@
 		clearForm: function() {
 			var self = this;
 			$.each(this.table.columns, function(colName, col) {
-
-				// (this.input.reset) ?
-				// 	this.input.reset()
-				// 	: null;
 
 				if (this.input.reset) {
 
@@ -1234,10 +922,7 @@
 				excludeRecords: [],
 				expression: undefined
 			}
-			// console.log('hi!');
 			var self = this;
-
-			// console.log(expression);
 
 			if (settings.expression === undefined) {
 
@@ -1268,9 +953,6 @@
 
 			}
 
-			// console.log(settings.expression);
-			// console.log(settings.columName);
-
 			$.each(this.table.records, function() {
 
 				settings.expression(this, this.fields[columnName], self.table.columns[columnName].input, settings.excludeRecords, settings.newValue, settings.oldValue);
@@ -1282,21 +964,15 @@
 
 		setRecordValues: function(expression) {
 			var instanceVars = this.getInstanceVariables();
-			// console.log(instanceVars);
 
 			$.each(this.table.records, function() {
-				// console.log(this);
 				expression(this, instanceVars);
 			});
-
-			// console.log(this.table.records);
 
 			this._renderTableBody();
 		},
 
 		getInstanceVariables: function() {
-			// console.log('test');
-			// console.log(this.options);
 			if (this.options.instanceVars) {
 				return this.options.instanceVars;
 			}
